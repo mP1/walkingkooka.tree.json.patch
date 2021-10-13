@@ -19,6 +19,7 @@ package walkingkooka.tree.json.patch;
 
 import org.junit.jupiter.api.Test;
 import walkingkooka.tree.json.JsonNode;
+import walkingkooka.tree.json.JsonPropertyName;
 import walkingkooka.tree.json.marshall.JsonNodeUnmarshallContext;
 import walkingkooka.tree.json.marshall.JsonNodeUnmarshallContexts;
 
@@ -42,6 +43,20 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
                 this.createPatchable(),
                 this.createPatch(),
                 new TestPatchable(AFTER)
+        );
+    }
+
+    @Test
+    public void testPatchInvalidProperty() {
+        final JsonPropertyName name = JsonPropertyName.with("abc");
+        final JsonNode value = JsonNode.string("xyz");
+
+        this.patchInvalidPropertyFails(
+                this.createPatchable(),
+                JsonNode.object()
+                        .set(name, value),
+                name,
+                value
         );
     }
 
@@ -77,6 +92,11 @@ final class TestPatchable implements Patchable<TestPatchable> {
         Objects.requireNonNull(json, "json");
         Objects.requireNonNull(context, "context");
         assertEquals(PatchableTestingTest.CONTEXT, context, "context");
+
+        if (json.isObject()) {
+            final JsonNode first = json.objectOrFail().firstChild().get();
+            Patchable.invalidPropertyPresent(first.name(), first);
+        }
 
         return new TestPatchable(json.stringOrFail());
     }
