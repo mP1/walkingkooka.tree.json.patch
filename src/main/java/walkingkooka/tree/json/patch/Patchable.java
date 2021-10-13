@@ -17,7 +17,10 @@
 
 package walkingkooka.tree.json.patch;
 
+import walkingkooka.tree.json.InvalidPropertyJsonNodeException;
 import walkingkooka.tree.json.JsonNode;
+import walkingkooka.tree.json.JsonPropertyName;
+import walkingkooka.tree.json.UnknownPropertyJsonNodeException;
 import walkingkooka.tree.json.marshall.JsonNodeUnmarshallContext;
 
 /**
@@ -30,4 +33,20 @@ public interface Patchable<T> {
      */
     T patch(final JsonNode json,
             final JsonNodeUnmarshallContext context);
+
+    /**
+     * Used to report an invalid property was encountered during a PATCH.
+     */
+    static void invalidPropertyPresent(final JsonPropertyName property,
+                                       final JsonNode node) {
+        throw new InvalidPropertyJsonNodeException(property, node);
+    }
+
+    /**
+     * Used to report an unknown property was encountered during a PATCH.
+     */
+    static void unknownPropertyPresent(final JsonPropertyName property,
+                                       final JsonNode node) {
+        throw new UnknownPropertyJsonNodeException(property, node);
+    }
 }
