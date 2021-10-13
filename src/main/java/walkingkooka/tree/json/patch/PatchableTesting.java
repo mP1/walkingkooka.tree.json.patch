@@ -17,7 +17,9 @@
 package walkingkooka.tree.json.patch;
 
 import org.junit.jupiter.api.Test;
+import walkingkooka.tree.json.InvalidPropertyJsonNodeException;
 import walkingkooka.tree.json.JsonNode;
+import walkingkooka.tree.json.JsonPropertyName;
 import walkingkooka.tree.json.marshall.JsonNodeUnmarshallContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -91,5 +93,31 @@ public interface PatchableTesting<T extends Patchable<T>> {
                 before.patch(patch, context),
                 () -> before + " patch " + patch
         );
+    }
+
+    default void patchInvalidPropertyFails(final T before,
+                                           final JsonNode patch,
+                                           final JsonPropertyName propertyName,
+                                           final JsonNode node) {
+        this.patchInvalidPropertyFails(
+                before,
+                patch,
+                this.createPatchContext(),
+                propertyName,
+                node
+        );
+    }
+
+    default void patchInvalidPropertyFails(final T before,
+                                           final JsonNode patch,
+                                           final JsonNodeUnmarshallContext context,
+                                           final JsonPropertyName propertyName,
+                                           final JsonNode node) {
+        final InvalidPropertyJsonNodeException thrown = assertThrows(
+                InvalidPropertyJsonNodeException.class,
+                () -> before.patch(patch, context)
+        );
+        assertEquals(propertyName, thrown.name(), "name");
+        assertEquals(node.removeParent(), thrown.node().removeParent(), "node");
     }
 }
