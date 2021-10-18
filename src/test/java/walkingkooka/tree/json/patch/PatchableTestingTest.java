@@ -52,7 +52,6 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
         final JsonNode value = JsonNode.string("xyz");
 
         this.patchInvalidPropertyFails(
-                this.createPatchable(),
                 JsonNode.object()
                         .set(name, value),
                 name,

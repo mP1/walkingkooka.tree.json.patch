@@ -95,6 +95,17 @@ public interface PatchableTesting<T extends Patchable<T>> {
         );
     }
 
+    default void patchInvalidPropertyFails(final JsonNode patch,
+                                           final JsonPropertyName propertyName,
+                                           final JsonNode node) {
+        this.patchInvalidPropertyFails(
+                this.createPatchable(),
+                patch,
+                propertyName,
+                node
+        );
+    }
+
     default void patchInvalidPropertyFails(final T before,
                                            final JsonNode patch,
                                            final JsonPropertyName propertyName,
