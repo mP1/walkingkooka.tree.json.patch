@@ -59,7 +59,11 @@ public interface PatchableTesting<T extends Patchable<T>> {
 
     default void patchAndCheck(final T before,
                                final JsonNode patch) {
-        this.patchAndCheck(before, patch, before);
+        this.patchAndCheck(
+                before,
+                patch,
+                this.createPatchContext()
+        );
     }
 
     default void patchAndCheck(final T before,
