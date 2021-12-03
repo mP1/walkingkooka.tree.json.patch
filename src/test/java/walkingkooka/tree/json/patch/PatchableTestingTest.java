@@ -22,10 +22,9 @@ import walkingkooka.tree.json.JsonNode;
 import walkingkooka.tree.json.JsonPropertyName;
 import walkingkooka.tree.json.marshall.JsonNodeUnmarshallContext;
 import walkingkooka.tree.json.marshall.JsonNodeUnmarshallContexts;
+import walkingkooka.tree.json.patch.PatchableTestingTest.TestPatchable;
 
 import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class PatchableTestingTest implements PatchableTesting<TestPatchable> {
 
@@ -75,45 +74,44 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
     }
 
     final static JsonNodeUnmarshallContext CONTEXT = JsonNodeUnmarshallContexts.fake();
-}
+
+    final class TestPatchable implements Patchable<TestPatchable> {
 
 
-final class TestPatchable implements Patchable<TestPatchable> {
-
-
-    TestPatchable(final String value) {
-        this.value = value;
-    }
-
-    @Override
-    public TestPatchable patch(final JsonNode json,
-                               final JsonNodeUnmarshallContext context) {
-        Objects.requireNonNull(json, "json");
-        Objects.requireNonNull(context, "context");
-        assertEquals(PatchableTestingTest.CONTEXT, context, "context");
-
-        if (json.isObject()) {
-            final JsonNode first = json.objectOrFail().firstChild().get();
-            Patchable.invalidPropertyPresent(first.name(), first);
+        TestPatchable(final String value) {
+            this.value = value;
         }
 
-        return new TestPatchable(json.stringOrFail());
-    }
+        @Override
+        public TestPatchable patch(final JsonNode json,
+                                   final JsonNodeUnmarshallContext context) {
+            Objects.requireNonNull(json, "json");
+            Objects.requireNonNull(context, "context");
+            checkEquals(PatchableTestingTest.CONTEXT, context, "context");
 
-    private final String value;
+            if (json.isObject()) {
+                final JsonNode first = json.objectOrFail().firstChild().get();
+                Patchable.invalidPropertyPresent(first.name(), first);
+            }
 
-    @Override
-    public int hashCode() {
-        return this.value.hashCode();
-    }
+            return new TestPatchable(json.stringOrFail());
+        }
 
-    @Override
-    public boolean equals(final Object other) {
-        return other instanceof TestPatchable && ((TestPatchable) other).value.equals(this.value);
-    }
+        private final String value;
 
-    @Override
-    public String toString() {
-        return this.value;
+        @Override
+        public int hashCode() {
+            return this.value.hashCode();
+        }
+
+        @Override
+        public boolean equals(final Object other) {
+            return other instanceof TestPatchable && ((TestPatchable) other).value.equals(this.value);
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
     }
 }
