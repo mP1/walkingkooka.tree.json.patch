@@ -58,11 +58,29 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
     JsonNodeUnmarshallContext createPatchContext();
 
     default void patchAndCheck(final T before,
+                               final String patch) {
+        this.patchAndCheck(
+                before,
+                JsonNode.parse(patch)
+        );
+    }
+
+    default void patchAndCheck(final T before,
                                final JsonNode patch) {
         this.patchAndCheck(
                 before,
                 patch,
                 this.createPatchContext()
+        );
+    }
+
+    default void patchAndCheck(final T before,
+                               final String patch,
+                               final JsonNodeUnmarshallContext context) {
+        this.patchAndCheck(
+                before,
+                JsonNode.parse(patch),
+                context
         );
     }
 
@@ -78,12 +96,34 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
     }
 
     default void patchAndCheck(final T before,
+                               final String patch,
+                               final T after) {
+        this.patchAndCheck(
+                before,
+                JsonNode.parse(patch),
+                after
+        );
+    }
+
+    default void patchAndCheck(final T before,
                                final JsonNode patch,
                                final T after) {
         this.patchAndCheck(
                 before,
                 patch,
                 this.createPatchContext(),
+                after
+        );
+    }
+
+    default void patchAndCheck(final T before,
+                               final String patch,
+                               final JsonNodeUnmarshallContext context,
+                               final T after) {
+        this.patchAndCheck(
+                before,
+                JsonNode.parse(patch),
+                context,
                 after
         );
     }
@@ -99,6 +139,16 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
         );
     }
 
+    default void patchInvalidPropertyFails(final String patch,
+                                           final String propertyName,
+                                           final JsonNode node) {
+        this.patchInvalidPropertyFails(
+                JsonNode.parse(patch),
+                JsonPropertyName.with(propertyName),
+                node
+        );
+    }
+
     default void patchInvalidPropertyFails(final JsonNode patch,
                                            final JsonPropertyName propertyName,
                                            final JsonNode node) {
@@ -106,6 +156,18 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                 this.createPatchable(),
                 patch,
                 propertyName,
+                node
+        );
+    }
+
+    default void patchInvalidPropertyFails(final T before,
+                                           final String patch,
+                                           final String propertyName,
+                                           final JsonNode node) {
+        this.patchInvalidPropertyFails(
+                before,
+                JsonNode.parse(patch),
+                JsonPropertyName.with(propertyName),
                 node
         );
     }

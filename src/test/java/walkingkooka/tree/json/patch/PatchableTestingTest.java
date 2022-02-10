@@ -46,6 +46,15 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
     }
 
     @Test
+    public void testPatchJsonStringAndCheck() {
+        this.patchAndCheck(
+                this.createPatchable(),
+                this.createPatch().toString(),
+                new TestPatchable(AFTER)
+        );
+    }
+
+    @Test
     public void testPatchInvalidProperty() {
         final JsonPropertyName name = JsonPropertyName.with("abc");
         final JsonNode value = JsonNode.string("xyz");
@@ -54,6 +63,19 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
                 JsonNode.object()
                         .set(name, value),
                 name,
+                value
+        );
+    }
+
+    @Test
+    public void testPatchInvalidPropertyStringOverloads() {
+        final JsonPropertyName name = JsonPropertyName.with("abc");
+        final JsonNode value = JsonNode.string("xyz");
+
+        this.patchInvalidPropertyFails(
+                JsonNode.object()
+                        .set(name, value).toString(),
+                name.value(),
                 value
         );
     }
