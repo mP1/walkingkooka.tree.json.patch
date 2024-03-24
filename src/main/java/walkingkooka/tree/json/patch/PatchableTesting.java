@@ -17,11 +17,16 @@
 package walkingkooka.tree.json.patch;
 
 import org.junit.jupiter.api.Test;
+import walkingkooka.collect.list.Lists;
 import walkingkooka.test.Testing;
 import walkingkooka.tree.json.InvalidPropertyJsonNodeException;
 import walkingkooka.tree.json.JsonNode;
 import walkingkooka.tree.json.JsonPropertyName;
 import walkingkooka.tree.json.marshall.JsonNodeUnmarshallContext;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -29,6 +34,43 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * A mixin interface with tests and helpers to assist in testing a {@link Patchable}
  */
 public interface PatchableTesting<T extends Patchable<T>> extends Testing {
+
+    @Test
+    default void testPatchApplyMethodNaming() {
+        this.checkEquals(
+                Lists.empty(),
+                Arrays.stream(
+                                this.createPatchable()
+                                        .getClass()
+                                        .getMethods()
+                        ).filter(m -> {
+                            final String name = m.getName();
+                            return name.equals("patch") || name.startsWith("patch");
+                        }).filter(m -> m.getReturnType().equals(JsonNode.class))
+                        .map(Method::toGenericString)
+                        .collect(Collectors.toList()),
+                "patchXXX methods should NOT return " + JsonNode.class
+        );
+    }
+
+    @Test
+    default void testPatchCreateMethodNaming() {
+        this.checkEquals(
+                Lists.empty(),
+                Arrays.stream(
+                                this.createPatchable()
+                                        .getClass()
+                                        .getMethods()
+                        ).filter(m -> m.getReturnType().equals(JsonNode.class))
+                        .filter(m -> {
+                            final String name = m.getName();
+                            return false == name.endsWith("Patch") && name.toLowerCase().contains("patch");
+                        })
+                        .map(Method::toGenericString)
+                        .collect(Collectors.toList()),
+                "XXXPatch methods should return " + JsonNode.class
+        );
+    }
 
     @Test
     default void testPatchNullJsonFails() {
