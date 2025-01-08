@@ -110,9 +110,9 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
                                     final Object actual,
                                     final Supplier<String> message) {
                 PatchableTesting.super.checkEquals(
-                        Lists.of("public walkingkooka.tree.json.JsonNode walkingkooka.tree.json.patch.PatchableTestingTest$TestPatchApplyMethodNamingFails.patchBadReturnType()"),
-                        actual,
-                        message
+                    Lists.of("public walkingkooka.tree.json.JsonNode walkingkooka.tree.json.patch.PatchableTestingTest$TestPatchApplyMethodNamingFails.patchBadReturnType()"),
+                    actual,
+                    message
                 );
             }
         }.testPatchApplyMethodNaming();
@@ -160,9 +160,9 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
                                     final Object actual,
                                     final Supplier<String> message) {
                 PatchableTesting.super.checkEquals(
-                        Lists.of("public walkingkooka.tree.json.JsonNode walkingkooka.tree.json.patch.PatchableTestingTest$TestPatchCreateMethodNamingFails.patchCreateBadName()"),
-                        actual,
-                        message
+                    Lists.of("public walkingkooka.tree.json.JsonNode walkingkooka.tree.json.patch.PatchableTestingTest$TestPatchCreateMethodNamingFails.patchCreateBadName()"),
+                    actual,
+                    message
                 );
             }
         }.testPatchCreateMethodNaming();
@@ -195,18 +195,18 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
     @Test
     public void testPatchAndCheck2() {
         this.patchAndCheck(
-                this.createPatchable(),
-                this.createPatch(),
-                new TestPatchable(AFTER)
+            this.createPatchable(),
+            this.createPatch(),
+            new TestPatchable(AFTER)
         );
     }
 
     @Test
     public void testPatchJsonStringAndCheck() {
         this.patchAndCheck(
-                this.createPatchable(),
-                this.createPatch().toString(),
-                new TestPatchable(AFTER)
+            this.createPatchable(),
+            this.createPatch().toString(),
+            new TestPatchable(AFTER)
         );
     }
 
@@ -216,10 +216,10 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
         final JsonNode value = JsonNode.string("xyz");
 
         this.patchInvalidPropertyFails(
-                JsonNode.object()
-                        .set(name, value),
-                name,
-                value
+            JsonNode.object()
+                .set(name, value),
+            name,
+            value
         );
     }
 
@@ -229,10 +229,10 @@ public final class PatchableTestingTest implements PatchableTesting<TestPatchabl
         final JsonNode value = JsonNode.string("xyz");
 
         this.patchInvalidPropertyFails(
-                JsonNode.object()
-                        .set(name, value).toString(),
-                name.value(),
-                value
+            JsonNode.object()
+                .set(name, value).toString(),
+            name.value(),
+            value
         );
     }
 
