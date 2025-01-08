@@ -38,37 +38,37 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
     @Test
     default void testPatchApplyMethodNaming() {
         this.checkEquals(
-                Lists.empty(),
-                Arrays.stream(
-                                this.createPatchable()
-                                        .getClass()
-                                        .getMethods()
-                        ).filter(m -> {
-                            final String name = m.getName();
-                            return name.equals("patch") || name.startsWith("patch");
-                        }).filter(m -> m.getReturnType().equals(JsonNode.class))
-                        .map(Method::toGenericString)
-                        .collect(Collectors.toList()),
-                "patchXXX methods should NOT return " + JsonNode.class
+            Lists.empty(),
+            Arrays.stream(
+                    this.createPatchable()
+                        .getClass()
+                        .getMethods()
+                ).filter(m -> {
+                    final String name = m.getName();
+                    return name.equals("patch") || name.startsWith("patch");
+                }).filter(m -> m.getReturnType().equals(JsonNode.class))
+                .map(Method::toGenericString)
+                .collect(Collectors.toList()),
+            "patchXXX methods should NOT return " + JsonNode.class
         );
     }
 
     @Test
     default void testPatchCreateMethodNaming() {
         this.checkEquals(
-                Lists.empty(),
-                Arrays.stream(
-                                this.createPatchable()
-                                        .getClass()
-                                        .getMethods()
-                        ).filter(m -> m.getReturnType().equals(JsonNode.class))
-                        .filter(m -> {
-                            final String name = m.getName();
-                            return false == name.endsWith("Patch") && name.toLowerCase().contains("patch");
-                        })
-                        .map(Method::toGenericString)
-                        .collect(Collectors.toList()),
-                "XXXPatch methods should return " + JsonNode.class
+            Lists.empty(),
+            Arrays.stream(
+                    this.createPatchable()
+                        .getClass()
+                        .getMethods()
+                ).filter(m -> m.getReturnType().equals(JsonNode.class))
+                .filter(m -> {
+                    final String name = m.getName();
+                    return false == name.endsWith("Patch") && name.toLowerCase().contains("patch");
+                })
+                .map(Method::toGenericString)
+                .collect(Collectors.toList()),
+            "XXXPatch methods should return " + JsonNode.class
         );
     }
 
@@ -77,8 +77,8 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
         final T patchable = this.createPatchable();
 
         assertThrows(
-                NullPointerException.class,
-                () -> patchable.patch(null, this.createPatchContext())
+            NullPointerException.class,
+            () -> patchable.patch(null, this.createPatchContext())
         );
     }
 
@@ -88,8 +88,8 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
         final T patchable = this.createPatchable();
 
         assertThrows(
-                NullPointerException.class,
-                () -> patchable.patch(this.createPatch(), null)
+            NullPointerException.class,
+            () -> patchable.patch(this.createPatch(), null)
         );
     }
 
@@ -102,17 +102,17 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
     default void patchAndCheck(final T before,
                                final String patch) {
         this.patchAndCheck(
-                before,
-                JsonNode.parse(patch)
+            before,
+            JsonNode.parse(patch)
         );
     }
 
     default void patchAndCheck(final T before,
                                final JsonNode patch) {
         this.patchAndCheck(
-                before,
-                patch,
-                this.createPatchContext()
+            before,
+            patch,
+            this.createPatchContext()
         );
     }
 
@@ -120,9 +120,9 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                final String patch,
                                final JsonNodeUnmarshallContext context) {
         this.patchAndCheck(
-                before,
-                JsonNode.parse(patch),
-                context
+            before,
+            JsonNode.parse(patch),
+            context
         );
     }
 
@@ -130,10 +130,10 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                final JsonNode patch,
                                final JsonNodeUnmarshallContext context) {
         this.patchAndCheck(
-                before,
-                patch,
-                context,
-                before
+            before,
+            patch,
+            context,
+            before
         );
     }
 
@@ -141,9 +141,9 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                final String patch,
                                final T after) {
         this.patchAndCheck(
-                before,
-                JsonNode.parse(patch),
-                after
+            before,
+            JsonNode.parse(patch),
+            after
         );
     }
 
@@ -151,10 +151,10 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                final JsonNode patch,
                                final T after) {
         this.patchAndCheck(
-                before,
-                patch,
-                this.createPatchContext(),
-                after
+            before,
+            patch,
+            this.createPatchContext(),
+            after
         );
     }
 
@@ -163,10 +163,10 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                final JsonNodeUnmarshallContext context,
                                final T after) {
         this.patchAndCheck(
-                before,
-                JsonNode.parse(patch),
-                context,
-                after
+            before,
+            JsonNode.parse(patch),
+            context,
+            after
         );
     }
 
@@ -175,9 +175,9 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                final JsonNodeUnmarshallContext context,
                                final T after) {
         this.checkEquals(
-                after,
-                before.patch(patch, context),
-                () -> before + " patch " + patch
+            after,
+            before.patch(patch, context),
+            () -> before + " patch " + patch
         );
     }
 
@@ -185,9 +185,9 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                            final String propertyName,
                                            final JsonNode node) {
         this.patchInvalidPropertyFails(
-                JsonNode.parse(patch),
-                JsonPropertyName.with(propertyName),
-                node
+            JsonNode.parse(patch),
+            JsonPropertyName.with(propertyName),
+            node
         );
     }
 
@@ -195,10 +195,10 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                            final JsonPropertyName propertyName,
                                            final JsonNode node) {
         this.patchInvalidPropertyFails(
-                this.createPatchable(),
-                patch,
-                propertyName,
-                node
+            this.createPatchable(),
+            patch,
+            propertyName,
+            node
         );
     }
 
@@ -207,10 +207,10 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                            final String propertyName,
                                            final JsonNode node) {
         this.patchInvalidPropertyFails(
-                before,
-                JsonNode.parse(patch),
-                JsonPropertyName.with(propertyName),
-                node
+            before,
+            JsonNode.parse(patch),
+            JsonPropertyName.with(propertyName),
+            node
         );
     }
 
@@ -219,11 +219,11 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                            final JsonPropertyName propertyName,
                                            final JsonNode node) {
         this.patchInvalidPropertyFails(
-                before,
-                patch,
-                this.createPatchContext(),
-                propertyName,
-                node
+            before,
+            patch,
+            this.createPatchContext(),
+            propertyName,
+            node
         );
     }
 
@@ -233,8 +233,8 @@ public interface PatchableTesting<T extends Patchable<T>> extends Testing {
                                            final JsonPropertyName propertyName,
                                            final JsonNode node) {
         final InvalidPropertyJsonNodeException thrown = assertThrows(
-                InvalidPropertyJsonNodeException.class,
-                () -> before.patch(patch, context)
+            InvalidPropertyJsonNodeException.class,
+            () -> before.patch(patch, context)
         );
         this.checkEquals(propertyName, thrown.name(), "name");
         this.checkEquals(node.removeParent(), thrown.node().removeParent(), "node");
